@@ -1,0 +1,38 @@
+stdio:
+
+FILE *
+stdin stdout stderr
+
+
+fopen()				perror() strerror()
+fclose()
+
+fgetc()
+fputc()
+
+fgets()
+fputs()
+
+fread()
+fwrite()
+
+fseek()
+ftell()
+rewind()
+
+fflush()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

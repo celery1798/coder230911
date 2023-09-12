@@ -1,0 +1,33 @@
+
+struct student_st buf[10];
+
+int n  = fread(buf,40,10,fp)
+n = 10
+n = 3;
+
+
+
+
+1 堆    2 栈     3 静态区
+
+
+FILE *fopen(const char *pathname, const char *mode)
+{
+
+	FILE *tmp;
+	tmp = malloc();
+	tmp->xxx = ;
+	tmp->xxxxx = ;
+
+	return tmp ;
+}
+
+
+
+
+
+
+
+
+
+
