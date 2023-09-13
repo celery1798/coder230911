@@ -2,11 +2,23 @@ sysio
 
 int  fd
 
+0 -> 键盘
+1 -> 显示器
+2 -> 显示器
+
 
 open();
+flags:
+r -> O_RDONLY
+r+ -> O_RDWR
+w -> O_WRONLY|O_CREAT|O_TRUNC
+w+ -> O_RDWR|O_CREAT|O_TRUNC
+a ->
+a+ ->
+
 close();
 
-read()
+read() 
 write();
 
 lseek();
