@@ -22,7 +22,8 @@ rewind()
 
 fflush()
 
-
+getline()
+hw:mygetline();
 
 
 
