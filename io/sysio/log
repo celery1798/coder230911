@@ -1,0 +1,24 @@
+sysio  
+
+int  fd
+
+
+open();
+close();
+
+read()
+write();
+
+lseek();
+
+dup();
+dup2();
+
+
+
+
+
+
+
+
+
