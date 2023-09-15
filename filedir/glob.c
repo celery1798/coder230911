@@ -8,6 +8,8 @@
 #include <string.h>
 
 #define PAT		"/etc/a*.conf"
+//#define PAT       "/etc/apg.conf"
+
 
 int myerrfunc(const char *epath, int eerrno)
 {
