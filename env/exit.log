@@ -1,0 +1,46 @@
+exit  _exit
+
+
+if(1)
+	xxxx;
+else if(2)
+		xxxx;
+     else
+	 	_exit(1);
+
+
+
+
+fd1 = open();
+if(fd1 < 0)
+{
+	perror();
+	exit(1);
+}
+
+atexit(f1);			-> close(fd1);
+
+fd2 = open();
+if( < 0)
+{
+	p();
+	exit(1);
+}
+atexit(f2);     	-> close(fd2);
+
+....... -> 99
+
+
+fd100 = open();
+if(fd100 < 0)
+{
+	perror();
+	exit(1);
+}
+atexit()		-> close(fd100);
+
+p = malloc()
+if( p == null)
+	exit(10);
+
+
