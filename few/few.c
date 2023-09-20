@@ -2,13 +2,16 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <sys/wait.h>
+
+//date +%s
 
 int main(int argc, char *argv[])
 {
 	pid_t pid;
 
-	printf("[%d]Begin!",getpid());
-	
+	puts("Begin!");
+
 	fflush(NULL);
 
 	pid = fork();
@@ -17,18 +20,17 @@ int main(int argc, char *argv[])
 		perror("fork()");
 		exit(1);
 	}
-	if(pid > 0)		// parent
+	if(pid == 0)		// parent
 	{
-		printf("[%d]Parent is working\n",getpid());
-	}
-	else			//child
-	{
-		printf("[%d]Child is working\n",getpid());
-	}
 
-	printf("[%d]End!\n",getpid());
+		execl("/usr/bin/date","date","+%s",NULL);
+		perror("execl()");
+		exit(1);
+	}
+	else
+		wait(NULL);
 
-	sleep(1000);
+	puts("End!");
 
 	exit(0);
 }
