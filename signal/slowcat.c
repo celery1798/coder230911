@@ -11,11 +11,11 @@
 
 int main(int argc, char *argv[])
 {
-	int sfd,dfd;
+	int sfd,dfd = 1;
 	char buf[BUFSIZE];
 	int len,ret,pos;
 
-	if(argc < 3)
+	if(argc < 2)
 	{
 		fprintf(stdout,"Usage: %s <src_file> <dest_file>\n",argv[0]);
 		exit(1);
@@ -33,20 +33,6 @@ int main(int argc, char *argv[])
 		}
 	}while(sfd < 0);
 	
-
-	do
-	{
-		dfd = open(argv[2],O_WRONLY|O_CREAT|O_TRUNC,0664);
-		if(dfd < 0)
-		{
-			if(errno != EINTR)
-			{
-				perror("open()");
-				close(sfd);
-				exit(1);	
-			}	
-		}	
-	}while(dfd < 0);
 
 	while(1)
 	{
@@ -78,7 +64,6 @@ int main(int argc, char *argv[])
 			}
 	}
 	close(sfd);
-	close(dfd);
 
 	exit(0);
 }
