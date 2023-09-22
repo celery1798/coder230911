@@ -8,15 +8,19 @@
 #include <unistd.h>
 #include <signal.h>
 
+
+#define BURST	100
 #define CPS		10
 #define BUFSIZE CPS
 
-static volatile int loop = 1;
+static volatile int token = 0;
 
 void alrm_handler(int s)
 {
 	alarm(1);
-	loop = 0;
+	token ++;
+	if(token > BURST)
+		token = BURST;
 }
 
 
@@ -38,6 +42,7 @@ int main(int argc, char *argv[])
 
 
 	do{
+
 		sfd = open(argv[1],O_RDONLY);
 		if(sfd < 0)
 		{
@@ -52,11 +57,9 @@ int main(int argc, char *argv[])
 
 	while(1)
 	{
-			while(loop)
+			while(token <= 0)
 				;
-		
-			loop = 1;
-
+			token --;
 			while((len = read(sfd, buf, BUFSIZE)) < 0)
 			{
 				if(errno ==EINTR)
