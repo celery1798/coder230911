@@ -105,7 +105,7 @@ int mytbf_fetchtoken(mytbf_t *p,int size)
 	int n;
 
 	if(size < 0)
-		return -1;
+		return -EINVAL;
 
 	while(me->token <= 0)
 		pause();

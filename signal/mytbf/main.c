@@ -50,9 +50,12 @@ int main(int argc, char *argv[])
 	while(1)
 	{
 
-		size = mytbf_fetchtoken(tbf,BUFSIZE);
-		
-
+		size = mytbf_fetchtoken(tbf,-BUFSIZE);
+		if(size < 0)
+		{
+			fprintf(stderr,"mytbf_fetchtoken():%s\n",strerror(-size));
+			exit(1);
+		}	
 			while((len = read(sfd, buf, size)) < 0)
 			{
 				if(errno ==EINTR)

@@ -7,7 +7,14 @@ typedef void mytbf_t;
 
 mytbf_t *mytbf_init(int cps,int burst);
 
-int mytbf_fetchtoken(mytbf_t *,int);
+
+/*
+mytbf_fetchtoken:xxxx
+@p-
+@size-
+return: success > 0 , failed < 0,-errno
+*/
+int mytbf_fetchtoken(mytbf_t *p,int size);
 
 int mytbf_returntoken(mytbf_t *,int);
 
