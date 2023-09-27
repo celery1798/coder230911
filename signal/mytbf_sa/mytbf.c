@@ -25,11 +25,15 @@ struct mytbf_st
 	int pos;
 };
 
-static void alrm_handler(int s)
+//static void alrm_handler(int s)
+static void alrm_sa(int s,siginfo_t *infop,void *unused)
 {
 	int i;
 //	alarm(1);
 	
+	if(infop->si_code != SI_KERNEL)
+		return ;
+
 	for(i = 0 ; i < MYTBF_MAX; i++)
 	{
 		if(job[i] != NULL)
@@ -67,9 +71,11 @@ static void module_load()
 	struct itimerval itv;
 //	alrm_handler_save = signal(SIGALRM,alrm_handler);
 
-	sa.sa_handler = alrm_handler;
+//	sa.sa_handler = alrm_handler;
+	sa.sa_sigaction = alrm_sa;
 	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
+//	sa.sa_flags = 0;
+	sa.sa_flags = SA_SIGINFO;
 	sigaction(SIGALRM, &sa, &osa);
 	/*if error*/
 
