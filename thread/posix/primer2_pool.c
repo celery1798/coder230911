@@ -28,12 +28,13 @@ void *thr_primer(void *p)
 			sched_yield();
 			pthread_mutex_lock(&mut_num);
 		}
-
 		if(num == -1)
 		{
+	//		printf("----break;------\n");
 			pthread_mutex_unlock(&mut_num);
 			break;
 		}
+
 		//num > 0
 		i = num;
 		num = 0;
