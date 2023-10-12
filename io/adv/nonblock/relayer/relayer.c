@@ -139,8 +139,10 @@ void *thr_relayer(void *p)
 					fsa_driver(&rel_job[i]->fsa21);
 				}
 				if(rel_job[i]->fsa12.state == STATE_T && rel_job[i]->fsa21.state == STATE_T)
+				{
 					rel_job[i]->job_state = STATE_OVER;
-				pthread_cond_broadcast(&rel_job[i]->cond_job_state);
+					pthread_cond_broadcast(&rel_job[i]->cond_job_state);
+				}	
 				pthread_mutex_unlock(&rel_job[i]->mut_job_state);
 			}
 		}
@@ -231,6 +233,100 @@ int rel_addjob(int fd1,int fd2)
 }
 
 
+int rel_canceljob(int id)
+{
+	
+	pthread_mutex_lock(&mut_rel_job);
+	if(id < 0 || id >= REL_JOBMAX || rel_job[id] == NULL)
+	{
+		pthread_mutex_unlock(&mut_rel_job);
+		return -EINVAL;
+	}
+	pthread_mutex_unlock(&mut_rel_job);
+
+	pthread_mutex_lock(&rel_job[id]->mut_job_state);
+	if(rel_job[id]->job_state == STATE_RUNNING)
+	{
+		rel_job[id]->job_state = STATE_CANCELED;
+		pthread_cond_broadcast(&rel_job[id]->cond_job_state);
+	}
+	else
+	{
+		if(rel_job[id]->job_state == STATE_CANCELED)
+		{
+			pthread_mutex_unlock(&rel_job[id]->mut_job_state);
+			return -ECANCELED;
+		}
+		else	// STATE_OVER
+		{
+			pthread_mutex_unlock(&rel_job[id]->mut_job_state);
+			return -EBUSY;
+		}
+	}
+	pthread_mutex_unlock(&rel_job[id]->mut_job_state);
+}
+
+static void fetch_stat(int id,struct rel_stat_st *statp)
+{
+	statp->fd1 = rel_job[id]->fd1;
+	statp->fd2 = rel_job[id]->fd2;
+	statp->state = rel_job[id]->job_state;
+	statp->count12 = rel_job[id]->fsa12.count;
+	statp->count21 = rel_job[id]->fsa21.count;
+}
+
+int rel_statjob(int id,struct rel_stat_st *statp)
+{
+	pthread_mutex_lock(&mut_rel_job);
+    if(id < 0 || id >= REL_JOBMAX || rel_job[id] == NULL)
+    {
+        pthread_mutex_unlock(&mut_rel_job);
+        return -EINVAL;
+    }
+    pthread_mutex_unlock(&mut_rel_job);
+
+	if(statp != NULL)
+	{
+		fetch_stat(id,statp);	
+	}
+	return 0;
+}
+
+int rel_waitjob(int id,struct rel_stat_st *statp)
+{
+	pthread_mutex_lock(&mut_rel_job);
+    if(id < 0 || id >= REL_JOBMAX || rel_job[id] == NULL)
+    {
+        pthread_mutex_unlock(&mut_rel_job);
+        return -EINVAL;
+    }
+
+    pthread_mutex_unlock(&mut_rel_job);
+	
+
+	pthread_mutex_lock(&rel_job[id]->mut_job_state);
+
+	while(rel_job[id]->job_state == STATE_RUNNING)
+		pthread_cond_wait(&rel_job[id]->cond_job_state,&rel_job[id]->mut_job_state);
+	pthread_mutex_unlock(&rel_job[id]->mut_job_state);
+
+	if(statp != NULL)
+    {
+        fetch_stat(id,statp);
+    }
+
+	pthread_mutex_destroy(&rel_job[id]->mut_job_state);	
+	pthread_cond_destroy(&rel_job[id]->cond_job_state);
+
+	pthread_mutex_lock(&mut_rel_job);
+	free(rel_job[id]);
+	rel_job[id] = NULL;
+	pthread_mutex_unlock(&mut_rel_job);
+
+    return 0;
+
+
+}
 
 
 

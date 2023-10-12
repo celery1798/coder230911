@@ -18,6 +18,7 @@
 int main(int argc, char *argv[])
 {
 	int fd1,fd2,job1,fd3,fd4,job2;
+	struct rel_stat_st st;
 
 	if((fd1 = open(TTY1,O_RDWR)) < 0)
 	{
@@ -69,7 +70,13 @@ int main(int argc, char *argv[])
 
 
 	while(1)
-		pause();
+	{
+		rel_statjob(job1,&st);
+		printf("job1:1->2(%ld)\t2->1(%ld)\n",st.count12,st.count21);
+		rel_statjob(job2,&st);
+		printf("job2:1->2(%ld)\t2->1(%ld)\n\n",st.count12,st.count21);
+		sleep(1);
+	}
 
 
 	close(fd1);
