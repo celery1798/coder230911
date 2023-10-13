@@ -161,9 +161,9 @@ void relay(int fd1,int fd2)
 			}
 		}
 	//获取监视结果
-		if( pfd[0].revents & POLLIN || pfd[1].events & POLLOUT || fsa12.state > STATE_AUTO)
+		if( pfd[0].revents & POLLIN || pfd[1].revents & POLLOUT || fsa12.state > STATE_AUTO)
 			fsa_driver(&fsa12);
-		if( pfd[1].events & POLLIN || pfd[0].revents & POLLOUT || fsa21.state > STATE_AUTO)
+		if( pfd[1].revents & POLLIN || pfd[0].revents & POLLOUT || fsa21.state > STATE_AUTO)
 			fsa_driver(&fsa21);
 	}
 	
