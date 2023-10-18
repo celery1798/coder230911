@@ -1,6 +1,8 @@
 #ifndef __PROTO_H__
 #define __PROTO_H__
 
+#define RCVPORT		"1988"
+
 #define NAMESIZE	13
 
 struct msg_st  
