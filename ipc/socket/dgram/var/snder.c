@@ -13,16 +13,22 @@
 
 int main(int argc, char *argv[])
 {
-	int sd;
+	int sd,size;
 	struct sockaddr_in  raddr;
 	socklen_t raddr_len;
-	struct msg_st sbuf;	
+	struct msg_st *sbuf;	
 
 	char ipstr[IPSTRSIZE];
 
-	if(argc < 2)
+	if(argc < 3)
 	{
 		fprintf(stderr,"Usage:...\n");
+		exit(1);
+	}
+
+	if(strlen(argv[2]) > NAMEMAX)
+	{
+		fprintf(stderr,"Name is too long.\n");
 		exit(1);
 	}
 
@@ -33,16 +39,20 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
-	memset(&sbuf,'\0',sizeof(sbuf));
-	strcpy(sbuf.name,"Alan");
-	sbuf.math = htonl(rand()%100);
-	sbuf.chinese = htonl(rand()%100);
+	size = sizeof(*sbuf) + strlen(argv[2]);
+	sbuf = malloc(size);
+	if(sbuf == NULL)
+		exit(1);
+
+	strcpy(sbuf->name,argv[2]);
+	sbuf->math = htonl(rand()%100);
+	sbuf->chinese = htonl(rand()%100);
 
 	raddr.sin_family = AF_INET;
 	raddr.sin_port = htons(atoi(RCVPORT));
 	inet_pton(AF_INET, argv[1], &raddr.sin_addr);
 
-	if(sendto(sd, &sbuf,sizeof(sbuf), 0 , (void *)&raddr,sizeof(raddr)) < 0)
+	if(sendto(sd, sbuf,size, 0 , (void *)&raddr,sizeof(raddr)) < 0)
 	{
 		perror("sendto()");
 		exit(1);
@@ -51,6 +61,7 @@ int main(int argc, char *argv[])
 	puts("OK!");
 
 	close(sd);
+	free(sbuf);
 
 	exit(0);
 }
