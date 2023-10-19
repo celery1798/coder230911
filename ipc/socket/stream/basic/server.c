@@ -44,6 +44,14 @@ int main(int argc, char *argv[])
 		exit(1);
 	}
 
+	int val = 1;
+	if(setsockopt(sd, SOL_SOCKET, SO_REUSEADDR,&val,sizeof(val)) < 0)
+	{
+		perror("setsockopt()");
+		exit(1);
+	}
+
+
 	laddr.sin_family = AF_INET;
 	laddr.sin_port = htons(atoi(SERVERPORT));
 	inet_pton(AF_INET, "0.0.0.0", &laddr.sin_addr);
