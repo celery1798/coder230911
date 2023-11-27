@@ -1,0 +1,80 @@
+笔记
+随堂代码
+作业
+实验性作业
+面试题
+JD
+
+
+
+c语言：
+基础：变量 常量  define*  数据类型 输入输出
+
+#define PI 3.14
+#define SEC_YEAR  (60LL*60LL*24LL*365LL)
+
+
+[存储类型] 数据类型 变量名 ＝ 值；*
+		auto register static extern
+		xxx.c  gcc   a.out 
+
+三大结构
+数组:（构造类型）一维 二维 字符
+指针：一级 二级 多级
+函数：化整为零 复用性  typedef
+
+数据类型 变量名 ＝ 值；
+
+int i = 1;
+float f = 3.4;
+int a[3] = {1,2,3};   ->  int[3] a = {1,2,3};
+int b[2][3] = {1,2,3,4,5,6};  -> int [2][3]  b = {};
+int *   p = &i;
+int *p[3] = {&i,&j,&k};  -> int *[3]  p = {  };
+int func(int ,int)  {    ;     ;    ;}
+->  int (int ,int)   func =   {    ;     ;    ;}
+
+
+
+typedef   已有类型  新名字；
+typedef  int  INT;		-> int  -> INT
+INT i; ->  int i;  
+
+typedef int * INT;      ->  int * -> INT
+INT i; ->  int * i;
+
+typedef int  A[6];   ->  int[6]  A;
+A a; ->  int a[6];
+
+typedef int A[2][3];
+
+typedef int FUN(int,int);    -> int(int,int) FUN
+FUN  f;  ->  int f(int,int)
+
+typedef int *FUN(int*,int*); 
+FUN  f;  -> int *f(int*,int*)
+
+typedef int (*FUN)(int*,int*);
+FUN f;  -> int (*f)(int*,int*);
+
+
+typedef int *(*FUN)(int*,int*);
+
+typedef int *(*FUN[3])(int*,int*);
+FUN f;  -> int *(*f[3])(int*,int*);
+		->  int*(*)(int*,int*)   [3]   f;
+
+构造类型：结构体 共用体 枚举类型
+
+
+
+
+
+ ds：递归
+
+
+
+
+
+
+
